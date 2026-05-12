@@ -18,6 +18,13 @@ export function createInitialGameState(): GameState {
     moveSpeed: 210,
     shield: 0,
     chainLightning: 0,
+    mirrorImages: 0,
+    recursiveShots: 0,
+    logOverflow: 0,
+    deathSaveActive: false,
+    piercingShots: 0,
+    dashEnabled: false,
+    dashCooldownMs: 0,
   };
 }
 
@@ -49,16 +56,6 @@ export function applyUpgrade(state: GameState, upgrade: UpgradeConfig): GameStat
     status: 'running',
     activeUpgradeIds: [...state.activeUpgradeIds, upgrade.id],
   };
-}
-
-export function recordEnemyDefeat(state: GameState, experience: number): GameState {
-  return addExperience(
-    {
-      ...state,
-      enemiesDefeated: state.enemiesDefeated + 1,
-    },
-    experience,
-  );
 }
 
 export function receiveDamage(state: GameState, amount: number): GameState {
@@ -132,5 +129,48 @@ export function enableChainLightning(amount: number) {
   return (state: GameState): GameState => ({
     ...state,
     chainLightning: state.chainLightning + amount,
+  });
+}
+
+export function enableMirrorImages(amount: number) {
+  return (state: GameState): GameState => ({
+    ...state,
+    mirrorImages: state.mirrorImages + amount,
+  });
+}
+
+export function enableRecursiveShots(amount: number) {
+  return (state: GameState): GameState => ({
+    ...state,
+    recursiveShots: state.recursiveShots + amount,
+  });
+}
+
+export function enableLogOverflow(amount: number) {
+  return (state: GameState): GameState => ({
+    ...state,
+    logOverflow: state.logOverflow + amount,
+  });
+}
+
+export function enableDeathSave() {
+  return (state: GameState): GameState => ({
+    ...state,
+    deathSaveActive: true,
+  });
+}
+
+export function enablePiercingShots(amount: number) {
+  return (state: GameState): GameState => ({
+    ...state,
+    piercingShots: state.piercingShots + amount,
+  });
+}
+
+export function enableEmergencyDash() {
+  return (state: GameState): GameState => ({
+    ...state,
+    dashEnabled: true,
+    dashCooldownMs: 1200,
   });
 }

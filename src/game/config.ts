@@ -6,6 +6,12 @@ import {
   boostFireRate,
   boostMoveSpeed,
   enableChainLightning,
+  enableDeathSave,
+  enableEmergencyDash,
+  enableLogOverflow,
+  enableMirrorImages,
+  enablePiercingShots,
+  enableRecursiveShots,
 } from './rules';
 
 export const RUN_DURATION_SECONDS = 300;
@@ -105,6 +111,48 @@ export const UPGRADE_CONFIGS: UpgradeConfig[] = [
     rarity: 'prototype',
     description: '子弹命中后有机会向附近异常放电。',
     apply: enableChainLightning(1),
+  },
+  {
+    id: 'mirror-image',
+    name: '分身镜像',
+    rarity: 'rare',
+    description: '周期性生成 2 个诱饵，干扰敌人追踪。',
+    apply: enableMirrorImages(2),
+  },
+  {
+    id: 'recursive-warhead',
+    name: '递归弹头',
+    rarity: 'prototype',
+    description: '子弹命中后分裂为 2 发，可连锁。',
+    apply: enableRecursiveShots(2),
+  },
+  {
+    id: 'log-overflow',
+    name: '溢出日志',
+    rarity: 'common',
+    description: '击败敌人留下持续伤害区域。',
+    apply: enableLogOverflow(12),
+  },
+  {
+    id: 'sandbox-reset',
+    name: '沙箱重启',
+    rarity: 'rare',
+    description: '受到致命伤害时免死一次，回复 50% 生命。',
+    apply: enableDeathSave(),
+  },
+  {
+    id: 'infiltration-protocol',
+    name: '渗透协议',
+    rarity: 'prototype',
+    description: '子弹穿透最多 2 个敌人。',
+    apply: enablePiercingShots(2),
+  },
+  {
+    id: 'emergency-dash',
+    name: '应急冲刺',
+    rarity: 'common',
+    description: '双击方向键冲刺，期间无敌（1.2s 冷却）。',
+    apply: enableEmergencyDash(),
   },
 ];
 

@@ -27,7 +27,14 @@ npm run dev       # 启动开发服务器
 npm run build     # TypeScript 检查并构建
 npm run test      # 运行核心规则测试
 npm run test:e2e  # 运行 Playwright 冒烟测试
+npm run deploy    # 构建并部署到 GitHub Pages
 ```
+
+## 部署到 GitHub Pages
+
+1. 确保仓库已推送到 GitHub。
+2. 在 GitHub 仓库 Settings > Pages 中将 Source 设置为 `gh-pages` 分支（或使用 GitHub Actions 自动部署）。
+3. 运行 `npm run deploy`，或直接推送 `main` 分支触发 `.github/workflows/deploy.yml` 自动部署。
 
 ## 项目结构
 

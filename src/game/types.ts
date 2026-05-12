@@ -17,9 +17,18 @@ export interface GameState {
   moveSpeed: number;
   shield: number;
   chainLightning: number;
+  mirrorImages: number;
+  recursiveShots: number;
+  logOverflow: number;
+  deathSaveActive: boolean;
+  piercingShots: number;
+  dashEnabled: boolean;
+  dashCooldownMs: number;
 }
 
 export type EnemyBehavior = 'chaser' | 'sprinter' | 'tank' | 'core';
+
+export type BossPhase = 'phase1' | 'phase2' | 'phase3';
 
 export interface EnemyConfig {
   id: string;

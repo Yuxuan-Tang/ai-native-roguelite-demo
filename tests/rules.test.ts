@@ -4,8 +4,13 @@ import {
   addExperience,
   applyUpgrade,
   createInitialGameState,
+  enableDeathSave,
+  enableEmergencyDash,
+  enableMirrorImages,
+  enableLogOverflow,
+  enablePiercingShots,
+  enableRecursiveShots,
   receiveDamage,
-  recordEnemyDefeat,
   updateCoreIntegrity,
 } from '../src/game/rules';
 
@@ -27,13 +32,6 @@ describe('roguelite rules', () => {
     expect(state.activeUpgradeIds).toContain('packet-burst');
   });
 
-  it('records enemy defeats and rewards experience', () => {
-    const state = recordEnemyDefeat(createInitialGameState(), 9);
-
-    expect(state.enemiesDefeated).toBe(1);
-    expect(state.experience).toBe(9);
-  });
-
   it('uses shield before health and loses at zero health', () => {
     const shielded = receiveDamage({ ...createInitialGameState(), shield: 10 }, 16);
     const defeated = receiveDamage({ ...createInitialGameState(), health: 8 }, 16);
@@ -48,5 +46,48 @@ describe('roguelite rules', () => {
 
     expect(state.coreIntegrity).toBe(0);
     expect(state.status).toBe('won');
+  });
+
+  it('initial state has all new fields with sensible defaults', () => {
+    const state = createInitialGameState();
+    expect(state.mirrorImages).toBe(0);
+    expect(state.recursiveShots).toBe(0);
+    expect(state.logOverflow).toBe(0);
+    expect(state.deathSaveActive).toBe(false);
+    expect(state.piercingShots).toBe(0);
+    expect(state.dashEnabled).toBe(false);
+    expect(state.dashCooldownMs).toBe(0);
+  });
+
+  it('new upgrade factories modify state correctly', () => {
+    const base = createInitialGameState();
+
+    const withImages = enableMirrorImages(2)(base);
+    expect(withImages.mirrorImages).toBe(2);
+
+    const withRecursive = enableRecursiveShots(2)(base);
+    expect(withRecursive.recursiveShots).toBe(2);
+
+    const withOverflow = enableLogOverflow(12)(base);
+    expect(withOverflow.logOverflow).toBe(12);
+
+    const withDeathSave = enableDeathSave()(base);
+    expect(withDeathSave.deathSaveActive).toBe(true);
+
+    const withPiercing = enablePiercingShots(2)(base);
+    expect(withPiercing.piercingShots).toBe(2);
+
+    const withDash = enableEmergencyDash()(base);
+    expect(withDash.dashEnabled).toBe(true);
+    expect(withDash.dashCooldownMs).toBe(1200);
+  });
+
+  it('applying new upgrades via applyUpgrade works end-to-end', () => {
+    const dashUpgrade = UPGRADE_CONFIGS.find((u) => u.id === 'emergency-dash')!;
+    const state = applyUpgrade({ ...createInitialGameState(), status: 'upgrade' }, dashUpgrade);
+
+    expect(state.status).toBe('running');
+    expect(state.dashEnabled).toBe(true);
+    expect(state.activeUpgradeIds).toContain('emergency-dash');
   });
 });

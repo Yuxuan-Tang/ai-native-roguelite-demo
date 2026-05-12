@@ -192,12 +192,25 @@ h3 {
 .upgrade-card {
   min-height: 126px;
   border: 1px solid rgba(215, 255, 244, 0.18);
-  background: rgba(17, 24, 39, 0.98);
+  background:
+    linear-gradient(
+      105deg,
+      rgba(17, 24, 39, 0.98) 38%,
+      rgba(19, 226, 183, 0.05) 49%,
+      rgba(17, 24, 39, 0.98) 60%
+    );
+  background-size: 200% 100%;
+  animation: shimmer 3.5s ease-in-out infinite;
   color: #eefbf7;
   text-align: left;
   cursor: pointer;
   padding: 14px;
   transition: border-color 160ms ease, transform 160ms ease;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
 .upgrade-card span {
